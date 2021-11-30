@@ -42,7 +42,7 @@ class MainWindow{
 
         learnButton.addActionListener(e -> Main.showLearnWindow());
         editButton.addActionListener(e -> Main.showEditWindow());
-        exitButton.addActionListener(e -> System.out.println("exit"));
+        exitButton.addActionListener(e -> Main.closeApp());
         mainPanel.add(learnButton);
         mainPanel.add(editButton);
         mainPanel.add(exitButton);
@@ -53,9 +53,20 @@ class MainWindow{
 
     public void setVisibility(boolean visibility){
         mainFrame.setVisible(visibility);
-        mainFrame.toFront();
     }
     public static JFrame getFrame(){
         return mainFrame;
+    }
+
+    public Point getPosition(){
+        return mainFrame.getLocation();
+    }
+
+    public void setPosition(Point position){
+        mainFrame.setLocation(position);
+    }
+
+    public  void dispose(){
+        mainFrame.dispose();
     }
 }

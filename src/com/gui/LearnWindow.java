@@ -52,4 +52,17 @@ public class LearnWindow {
         return learnFrame;
     }
 
+    public Point getPosition(){
+        return learnFrame.getLocation();
+    }
+
+    public void setPosition(Point position){
+        learnFrame.setLocation(position);
+    }
+    public  void dispose(){
+        learnFrame.dispose();
+    }
+    public boolean isVisible(){
+        return learnFrame.isVisible();
+    }
 }

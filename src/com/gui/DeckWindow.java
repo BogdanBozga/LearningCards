@@ -60,10 +60,19 @@ public class DeckWindow {
 
     public void setVisibility(boolean visibility){
         deckFrame.setVisible(visibility);
-        deckFrame.toFront();
+    }
+    public Point getPosition(){
+        return deckFrame.getLocation();
     }
 
+    public void setPosition(Point position) {
+        deckFrame.setLocation(position);
+    }
     public static JFrame getFrame(){
         return deckFrame;
+    }
+
+    public  void dispose(){
+        deckFrame.dispose();
     }
 }
