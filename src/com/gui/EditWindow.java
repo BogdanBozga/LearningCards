@@ -1,7 +1,6 @@
 package com.gui;
 
 import javax.swing.*;
-import javax.swing.event.SwingPropertyChangeSupport;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class EditWindow {
     private  static JFrame editFrame;
-    private JPanel editPanel;
+    private JScrollPane editPanel;
 
     public EditWindow(){
         editFrame = new JFrame("Learning Cards");
@@ -17,7 +16,7 @@ public class EditWindow {
         editFrame.setLayout(new BorderLayout());
         editFrame.setSize(Standards.width,Standards.height);
 
-        editPanel = new JPanel();
+        editPanel = new JScrollPane();
 
 
 
@@ -33,6 +32,21 @@ public class EditWindow {
         newButton.setFocusable(false);
         newButton.addActionListener(e -> this.createNewDeck());
 
+        JButton editSelectedButton = new JButton("Edit Selected");
+        editSelectedButton.setFont(Standards.myFont);
+        editSelectedButton.setSize(25,25);
+        editSelectedButton.setFocusable(false);
+        editSelectedButton.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        if(Main.decksList.verifyIfSelected()){
+                            Main.deckWindow.setName(Main.decksList.getSelectedValue());
+                            Main.showDeckWindow();
+                        }
+                    } });
+
+
+
         JPanel panelSouth = new JPanel();
         JPanel panelNorth = new JPanel();
         JPanel panelWest = new JPanel();
@@ -46,6 +60,7 @@ public class EditWindow {
 
         panelSouth.add(newButton);
         panelSouth.add(backButton);
+        panelSouth.add(editSelectedButton);
 
         editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
         editFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
@@ -102,11 +117,22 @@ public class EditWindow {
         saveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                DeckInfoGui deck= new DeckInfoGui(text.getText());
-                deckCreate.dispose();
+                if (Main.decksList.verifyIfExist(text.getText())) {
 
+                    //warning that the deck with this specific name already exist
+                } else {
+                    DeckInfoGui deck = new DeckInfoGui(text.getText());
+                    Main.decksList.addDeck(deck);
+//                    editPanel.add(deck.getFrame());
+                    editFrame.getContentPane().remove(editPanel);
+                    editPanel = Main.decksList.getList();
+                    editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
+                    refresh();
+                    deckCreate.dispose();
+                }
             }
         });
+
 
 
         JButton cancelButton = new JButton("Cancel");
@@ -142,6 +168,12 @@ public class EditWindow {
 
 
         deckCreate.setVisible(true);
+    }
+
+    public void refresh(){
+        editFrame.invalidate();
+        editFrame.validate();
+        editFrame.repaint();
     }
 
 

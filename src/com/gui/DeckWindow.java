@@ -6,7 +6,10 @@ import java.awt.*;
 public class DeckWindow {
     private static JFrame deckFrame;
     private JPanel deckPanel;
-
+    String name;
+    Integer numberCards=0;
+    JTextField nameField;
+    JTextField numberCardsField;
 
 
     public DeckWindow(){
@@ -16,8 +19,13 @@ public class DeckWindow {
         deckFrame.setSize(Standards.width,Standards.height);
 
         deckPanel = new JPanel();
+        nameField = new JTextField();
+        numberCardsField = new JTextField();
 
-
+        nameField.setEditable(false);
+        nameField.setFont(Standards.myFont);
+        numberCardsField.setEditable(false);
+        numberCardsField.setFont(Standards.myFont);
 
         JButton backButton = new JButton("Back");
         backButton.setFont(Standards.myFont);
@@ -50,6 +58,8 @@ public class DeckWindow {
         panelSouth.add(removeButton);
         panelSouth.add(backButton);
 
+        panelNorth.add(nameField);
+        panelNorth.add(numberCardsField);
         deckFrame.getContentPane().add(deckPanel,BorderLayout.CENTER);
         deckFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
         deckFrame.getContentPane().add(panelNorth,BorderLayout.NORTH);
@@ -74,5 +84,15 @@ public class DeckWindow {
 
     public  void dispose(){
         deckFrame.dispose();
+    }
+    public boolean isVisible(){
+        return deckFrame.isVisible();
+    }
+
+    public void setName(String data){
+        this.name=data.split(" ")[0];
+        this.numberCards = Integer.valueOf(data.split(" ")[2]);
+        nameField.setText(name);
+        numberCardsField.setText(numberCards.toString());
     }
 }

@@ -4,8 +4,11 @@ public class Main {
     private static final MainWindow  mainWindow = new MainWindow();
     private static final LearnWindow learnWindow = new LearnWindow();
     private static final EditWindow editWindow = new EditWindow();
-    private static final DeckWindow deckWindow = new DeckWindow();
+    public static final DeckWindow deckWindow = new DeckWindow();
     private static final WelcomeWindow welcomeWindow = new WelcomeWindow();
+    public static final DecksList decksList = new DecksList();
+
+
     public static void main(String[] args) {
 //        showMainWindow();
         showWelcomeWindow();
@@ -27,25 +30,27 @@ public class Main {
         }else if(welcomeWindow.isVisible()){
             mainWindow.setPosition(welcomeWindow.getPosition());
             welcomeWindow.setVisibility(false);
+        }else if(deckWindow.isVisible()){
+            mainWindow.setPosition(deckWindow.getPosition());
+            deckWindow.setVisibility(false);
         }
         mainWindow.setVisibility(true);
     }
 
     public static void showLearnWindow(){
         learnWindow.setPosition(mainWindow.getPosition());
-
         mainWindow.setVisibility(false);
         learnWindow.setVisibility(true);
     }
 
     public static void showEditWindow(){
         editWindow.setPosition(mainWindow.getPosition());
-
         mainWindow.setVisibility(false);
         editWindow.setVisibility(true);
     }
 
     public static void showDeckWindow(){
+        deckWindow.setPosition(editWindow.getPosition());
         mainWindow.setVisibility(false);
         learnWindow.setVisibility(false);
         editWindow.setVisibility(false);
