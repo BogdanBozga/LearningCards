@@ -1,6 +1,14 @@
 package com.gui;
+import com.fun.Deck;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
+//    public static final List<Deck> deckList = new ArrayList<>();
+    public static final Map<String, Deck> deckDict = new HashMap<>();
     private static final MainWindow  mainWindow = new MainWindow();
     private static final LearnWindow learnWindow = new LearnWindow();
     private static final EditWindow editWindow = new EditWindow();
@@ -10,8 +18,8 @@ public class Main {
 
 
     public static void main(String[] args) {
-//        showMainWindow();
-        showWelcomeWindow();
+        showMainWindow();
+//        showWelcomeWindow();
     }
 
 

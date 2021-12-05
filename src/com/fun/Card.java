@@ -8,17 +8,31 @@ private int learningScore;
 private boolean newCard;
 private int readCount;
 
-//+verifyIfNew() : void
-//+increaseReadCount(): void
-//+modifyScore(): void
-    public void verifyIfNew(){
-
+    public Card(String infoFront,String infoBack){
+        frontInfo = new CardLearnInfo(infoFront);
+        backInfo = new CardLearnInfo(infoBack);
     }
+    public Card(String infoFront,String infoFrontPhoto,String infoBack,String infoBackPhoto){
+        frontInfo = new CardLearnInfo(infoFront,infoFrontPhoto);
+        backInfo = new CardLearnInfo(infoBack,infoBackPhoto);
+    }
+
+    public void verifyIfNew(){
+    }
+
     public void increaseReadCount(){
         readCount++;
     }
     public void modifyScore(){
 
+    }
+
+    public String getFrontInfo(){
+        return frontInfo.getTextInfo();
+    }
+
+    public String getBackInfo(){
+        return frontInfo.getTextInfo();
     }
 }
 

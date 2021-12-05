@@ -1,16 +1,24 @@
 package com.gui;
 
+import com.fun.Card;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeckWindow {
     private static JFrame deckFrame;
-    private JPanel deckPanel;
+//    private JPanel deckPanel;
     String name;
     Integer numberCards=0;
     JTextField nameField;
     JTextField numberCardsField;
-
+    NewCardWindow newCardWindow;
+    private JScrollPane deckJScrollPanel;
+    public List<String> cardsList;
 
     public DeckWindow(){
         deckFrame = new JFrame("Learning Cards");
@@ -18,7 +26,7 @@ public class DeckWindow {
         deckFrame.setLayout(new BorderLayout());
         deckFrame.setSize(Standards.width,Standards.height);
 
-        deckPanel = new JPanel();
+        deckJScrollPanel = new JScrollPane();
         nameField = new JTextField();
         numberCardsField = new JTextField();
 
@@ -37,11 +45,20 @@ public class DeckWindow {
         newButton.setFont(Standards.myFont);
         newButton.setSize(25,25);
         newButton.setFocusable(false);
+        newButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        newCardWindow = new NewCardWindow(name);
+                        newCardWindow.setVisible(true);
+                    }
+                });
+
 
         JButton removeButton = new JButton("Remove Card");
         removeButton.setFont(Standards.myFont);
         removeButton.setSize(25,25);
         removeButton.setFocusable(false);
+//        backButton.addActionListener(e -> Main.showMainWindow());
 
         JPanel panelSouth = new JPanel();
         JPanel panelNorth = new JPanel();
@@ -60,19 +77,45 @@ public class DeckWindow {
 
         panelNorth.add(nameField);
         panelNorth.add(numberCardsField);
-        deckFrame.getContentPane().add(deckPanel,BorderLayout.CENTER);
+        deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
         deckFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
         deckFrame.getContentPane().add(panelNorth,BorderLayout.NORTH);
         deckFrame.getContentPane().add(panelEast,BorderLayout.EAST);
         deckFrame.getContentPane().add(panelWest,BorderLayout.WEST);
 
+
+
+        deckJScrollPanel = new JScrollPane();
+        cardsList = new ArrayList<>();
+
+    }
+    public void updateCardList(){
+        deckFrame.getContentPane().remove(deckJScrollPanel);
+        deckJScrollPanel = new JScrollPane(new JList(cardsList.toArray()));
+        deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
+
+
+        refresh();
     }
 
+    public void increaseNumberCards(){
+        numberCards++;
+        Main.deckDict.get(name).increaseNumberCards();
+        update();
+    }
+    public void update(){
+        numberCardsField.setText(numberCards.toString());
+    }
     public void setVisibility(boolean visibility){
         deckFrame.setVisible(visibility);
     }
     public Point getPosition(){
         return deckFrame.getLocation();
+    }
+
+    public void addCard(Card card){
+        cardsList.add(card.getFrontInfo()+" --- "+card.getBackInfo());
+        updateCardList();
     }
 
     public void setPosition(Point position) {
@@ -89,10 +132,18 @@ public class DeckWindow {
         return deckFrame.isVisible();
     }
 
-    public void setName(String data){
-        this.name=data.split(" ")[0];
-        this.numberCards = Integer.valueOf(data.split(" ")[2]);
+    public void setName(String name){
+        this.name=name;
+        this.numberCards = Main.deckDict.get(name).getTotalCardsNumber();
         nameField.setText(name);
         numberCardsField.setText(numberCards.toString());
+    }
+    public void closeNewCardWindow(){
+        newCardWindow.dispose();
+    }
+    public void refresh(){
+        deckFrame.invalidate();
+        deckFrame.validate();
+        deckFrame.repaint();
     }
 }

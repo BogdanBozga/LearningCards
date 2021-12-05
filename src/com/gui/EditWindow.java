@@ -1,5 +1,7 @@
 package com.gui;
 
+import com.fun.Deck;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -40,7 +42,7 @@ public class EditWindow {
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
                         if(Main.decksList.verifyIfSelected()){
-                            Main.deckWindow.setName(Main.decksList.getSelectedValue());
+                            Main.deckWindow.setName(Main.decksList.getSelectedValue().split(" ")[0]);
                             Main.showDeckWindow();
                         }
                     } });
@@ -104,7 +106,7 @@ public class EditWindow {
         deckCreate.setSize(width,height);
         deckCreate.setLocation(this.getPosition());
         deckCreate.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        DeckInfoGui deck;
+//        DeckInfoGui deck;
         JTextField text = new JTextField();
 
         text.setFont(Standards.myFont);
@@ -122,8 +124,10 @@ public class EditWindow {
                     //warning that the deck with this specific name already exist
                 } else {
                     DeckInfoGui deck = new DeckInfoGui(text.getText());
+                    Main.deckDict.put(text.getText(),new Deck(text.getText()));
+
+
                     Main.decksList.addDeck(deck);
-//                    editPanel.add(deck.getFrame());
                     editFrame.getContentPane().remove(editPanel);
                     editPanel = Main.decksList.getList();
                     editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
