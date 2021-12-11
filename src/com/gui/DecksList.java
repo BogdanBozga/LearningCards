@@ -52,7 +52,11 @@ public class DecksList {
     }
 
     JScrollPane getList(){
-        scrollPane = new JScrollPane(decksJList);
+        if (decksJList.getModel().getSize() != 0)
+            scrollPane = new JScrollPane(decksJList);
+        else
+            scrollPane = new JScrollPane();
+
         scrollPane.setFont(Standards.myFont);
         return scrollPane;
     }

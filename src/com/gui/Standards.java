@@ -11,4 +11,6 @@ public class Standards
     public static String databaseName = "LearningCardsDB";
     public static String databaseUser = "root";
     public static String databasePassword = "";
+
+//    sudo service mysql stop
 }

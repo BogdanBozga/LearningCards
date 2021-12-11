@@ -11,10 +11,11 @@ public class Main {
     public static final Map<String, Deck> deckDict = new HashMap<>();
     private static final MainWindow  mainWindow = new MainWindow();
     private static final LearnWindow learnWindow = new LearnWindow();
+    public static final DecksList decksList = new DecksList();
     private static final EditWindow editWindow = new EditWindow();
     public static final DeckWindow deckWindow = new DeckWindow();
     private static final WelcomeWindow welcomeWindow = new WelcomeWindow();
-    public static final DecksList decksList = new DecksList();
+
 
 
     public static void main(String[] args) {
@@ -26,6 +27,7 @@ public class Main {
     public static void showWelcomeWindow(){
         welcomeWindow.setVisibility(true);
     }
+
     public static void showMainWindow(){
 
         if(learnWindow.isVisible()) {
@@ -47,6 +49,7 @@ public class Main {
 
     public static void showLearnWindow(){
         learnWindow.setPosition(mainWindow.getPosition());
+        learnWindow.update();
         mainWindow.setVisibility(false);
         learnWindow.setVisibility(true);
     }

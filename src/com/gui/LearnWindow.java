@@ -2,10 +2,14 @@ package com.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class LearnWindow {
     private static JFrame learnFrame;
-    private JPanel learnPanel;
+//    private JPanel learnPanel;
+    private JScrollPane learnJScrollPane;
 
     public LearnWindow(){
         learnFrame = new JFrame("Learning Cards");
@@ -15,7 +19,7 @@ public class LearnWindow {
 
 
 
-        learnPanel = new JPanel();
+//        learnPanel = new JPanel();
 
 
         JButton backButton = new JButton("Back");
@@ -35,8 +39,41 @@ public class LearnWindow {
         panelEast.setPreferredSize(new Dimension(65,1));
         panelWest.setPreferredSize(new Dimension(65,1));
 
+
+
+
+
+        learnJScrollPane = new JScrollPane();
+
+        update();
+//        learnFrame.getContentPane().remove(learnJScrollPane);
+//        if(Main.decksList != null)
+//            learnJScrollPane = Main.decksList.getList();
+//        learnFrame.getContentPane().add(learnJScrollPane,BorderLayout.CENTER);
+//        refresh();
+
+
+
+        JButton learnSelectedButton = new JButton("Learn Selected");
+        learnSelectedButton.setFont(Standards.myFont);
+        learnSelectedButton.setSize(25,25);
+        learnSelectedButton.setFocusable(false);
+//        learnSelectedButton.addActionListener(
+//                new ActionListener() {
+//                    public void actionPerformed(ActionEvent e) {
+//                        newCardWindow = new NewCardWindow(name);
+//                        newCardWindow.setVisible(true);
+//                    }
+//                });
+
+
+
+
+
         panelSouth.add(backButton);
-        learnFrame.getContentPane().add(learnPanel,BorderLayout.CENTER);
+        panelSouth.add(learnSelectedButton);
+
+        learnFrame.getContentPane().add(learnJScrollPane,BorderLayout.CENTER);
         learnFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
         learnFrame.getContentPane().add(panelNorth,BorderLayout.NORTH);
         learnFrame.getContentPane().add(panelEast,BorderLayout.EAST);
@@ -65,4 +102,26 @@ public class LearnWindow {
     public boolean isVisible(){
         return learnFrame.isVisible();
     }
-}
+
+    public void update(){
+        if(Main.decksList != null)
+            learnJScrollPane = Main.decksList.getList();
+        learnFrame.getContentPane().add(learnJScrollPane,BorderLayout.CENTER);
+        refresh();
+    }
+
+    public void refresh(){
+        learnFrame.invalidate();
+        learnFrame.validate();
+        learnFrame.repaint();
+    }
+//
+//    {
+//        public void updateCardList(){
+//        deckFrame.getContentPane().remove(deckJScrollPanel);
+//        deckJScrollPanel = new JScrollPane(new JList(cardsList.toArray()));
+//        deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
+//        refresh();
+//    }
+    }
+

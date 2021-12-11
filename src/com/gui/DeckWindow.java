@@ -93,8 +93,6 @@ public class DeckWindow {
         deckFrame.getContentPane().remove(deckJScrollPanel);
         deckJScrollPanel = new JScrollPane(new JList(cardsList.toArray()));
         deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
-
-
         refresh();
     }
 
