@@ -1,19 +1,22 @@
 package com.gui;
+import com.fun.DbConnection;
 import com.fun.Deck;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Main {
 //    public static final List<Deck> deckList = new ArrayList<>();
+    public static final DbConnection connectionDB = new DbConnection();
     public static final Map<String, Deck> deckDict = new HashMap<>();
+    public static final DecksList decksList = new DecksList();
+
     private static final MainWindow  mainWindow = new MainWindow();
     private static final LearnWindow learnWindow = new LearnWindow();
-    public static final DecksList decksList = new DecksList();
+
+
     private static final EditWindow editWindow = new EditWindow();
-    public static final DeckWindow deckWindow = new DeckWindow();
+    public static  DeckWindow deckWindow = new DeckWindow();
     private static final WelcomeWindow welcomeWindow = new WelcomeWindow();
 
 
@@ -21,6 +24,8 @@ public class Main {
     public static void main(String[] args) {
         showMainWindow();
 //        showWelcomeWindow();
+
+        connectionDB.initializeDeckDict();
     }
 
 
@@ -30,6 +35,7 @@ public class Main {
 
     public static void showMainWindow(){
 
+        decksList.startOperation();
         if(learnWindow.isVisible()) {
             mainWindow.setPosition(learnWindow.getPosition());
             learnWindow.setVisibility(false);
@@ -55,13 +61,20 @@ public class Main {
     }
 
     public static void showEditWindow(){
-        editWindow.setPosition(mainWindow.getPosition());
+        if(mainWindow.isVisible())
+            editWindow.setPosition(mainWindow.getPosition());
+        else if(deckWindow.isVisible())
+            editWindow.setPosition(deckWindow.getPosition());
+        deckWindow.setVisibility(false);
         mainWindow.setVisibility(false);
         editWindow.setVisibility(true);
+
+        editWindow.refresh();
     }
 
     public static void showDeckWindow(){
         deckWindow.setPosition(editWindow.getPosition());
+//        mainWindow.setPosition(editWindow.getPosition());
         mainWindow.setVisibility(false);
         learnWindow.setVisibility(false);
         editWindow.setVisibility(false);

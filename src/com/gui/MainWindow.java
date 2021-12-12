@@ -69,4 +69,8 @@ class MainWindow{
     public  void dispose(){
         mainFrame.dispose();
     }
+
+    public boolean isVisible(){
+        return mainFrame.isVisible();
+    }
 }

@@ -19,6 +19,7 @@ public class DeckWindow {
     NewCardWindow newCardWindow;
     private JScrollPane deckJScrollPanel;
     public List<String> cardsList;
+    public JList cardsJList;
 
     public DeckWindow(){
         deckFrame = new JFrame("Learning Cards");
@@ -29,6 +30,7 @@ public class DeckWindow {
         deckJScrollPanel = new JScrollPane();
         nameField = new JTextField();
         numberCardsField = new JTextField();
+        cardsList = new ArrayList<>();
 
         nameField.setEditable(false);
         nameField.setFont(Standards.myFont);
@@ -39,7 +41,7 @@ public class DeckWindow {
         backButton.setFont(Standards.myFont);
         backButton.setSize(25,25);
         backButton.setFocusable(false);
-        backButton.addActionListener(e -> Main.showMainWindow());
+        backButton.addActionListener(e -> Main.showEditWindow());
 
         JButton newButton = new JButton("New Card");
         newButton.setFont(Standards.myFont);
@@ -83,15 +85,11 @@ public class DeckWindow {
         deckFrame.getContentPane().add(panelEast,BorderLayout.EAST);
         deckFrame.getContentPane().add(panelWest,BorderLayout.WEST);
 
-
-
-        deckJScrollPanel = new JScrollPane();
-        cardsList = new ArrayList<>();
-
+        updateCardList();
     }
     public void updateCardList(){
         deckFrame.getContentPane().remove(deckJScrollPanel);
-        deckJScrollPanel = new JScrollPane(new JList(cardsList.toArray()));
+        deckJScrollPanel = new JScrollPane(cardsJList);
         deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
         refresh();
     }
@@ -101,6 +99,9 @@ public class DeckWindow {
         Main.deckDict.get(name).increaseNumberCards();
         update();
     }
+
+
+
     public void update(){
         numberCardsField.setText(numberCards.toString());
     }
@@ -112,8 +113,10 @@ public class DeckWindow {
     }
 
     public void addCard(Card card){
-        cardsList.add(card.getFrontInfo()+" --- "+card.getBackInfo());
+        cardsList.add(card.getFrontInfo().getTextInfo()+" --- "+card.getBackInfo().getTextInfo());
+        cardsJList=new JList(cardsList.toArray());
         updateCardList();
+        refresh();
     }
 
     public void setPosition(Point position) {
@@ -131,10 +134,24 @@ public class DeckWindow {
     }
 
     public void setName(String name){
+        this.name = new String();
+        cardsList = new ArrayList<>();
+        updateCardList();
+        refresh();
+
         this.name=name;
         this.numberCards = Main.deckDict.get(name).getTotalCardsNumber();
         nameField.setText(name);
         numberCardsField.setText(numberCards.toString());
+
+        for(Card card : Main.deckDict.get(name).getCards()){
+            String cardInf = card.getFrontInfo().getTextInfo()+ " --- " + card.getBackInfo().getTextInfo();
+//            System.out.println(cardInf);
+            cardsList.add(cardInf);
+        }
+        cardsJList = new JList(cardsList.toArray());
+        updateCardList();
+        refresh();
     }
     public void closeNewCardWindow(){
         newCardWindow.dispose();

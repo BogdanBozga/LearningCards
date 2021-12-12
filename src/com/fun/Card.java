@@ -27,12 +27,12 @@ private int readCount;
 
     }
 
-    public String getFrontInfo(){
-        return frontInfo.getTextInfo();
+    public CardLearnInfo getFrontInfo(){
+        return frontInfo;
     }
 
-    public String getBackInfo(){
-        return frontInfo.getTextInfo();
+    public CardLearnInfo getBackInfo(){
+        return backInfo;
     }
 }
 

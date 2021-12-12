@@ -1,11 +1,17 @@
 package com.fun;
 
+import com.gui.Main;
+
 import java.util.List;
 import java.util.Vector;
 
+import static com.gui.Main.connectionDB;
+
+//import gui.Main;
 public class Deck {
 
     private String name;
+    private String ID;
     private List<Card> cards;
     private LearningStats oldStats;
     private int totalCardsNumber;
@@ -17,10 +23,12 @@ public class Deck {
         this.name = name;
         totalCardsNumber = 0;
         learnPercentage = 0.0;
+        connectionDB.insertNewDeckInDB(name);
+
     }
 
-    public Deck(String name, Vector<Card> cards, int totalCardsNumber) {
-        cards = new Vector<>();
+    public Deck(String name, List<Card> cards, int totalCardsNumber) {
+//        cards = new Vector<>();
 
         this.name = name;
         this.cards = cards;
@@ -31,6 +39,9 @@ public class Deck {
 
     }
 
+    public List<Card> getCards(){
+        return this.cards;
+    }
     public void addCard(Card card){
         cards.add(card);
     }
@@ -41,6 +52,7 @@ public class Deck {
 
     public void increaseNumberCards(){
         totalCardsNumber++;
+        connectionDB.updateCardsNumber(totalCardsNumber,name);
     }
 
     public int getTotalCardsNumber() {

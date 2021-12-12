@@ -23,34 +23,6 @@ public class NewCardWindow{
         newCardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newCardFrame.setLayout(new GridLayout(3,1));
         newCardFrame.setSize(Standards.width,Standards.height);
-
-        JButton cancelButton = new JButton("Cancel");
-        cancelButton.setFont(Standards.myFont);
-        cancelButton.setSize(25,25);
-        cancelButton.setFocusable(false);
-        cancelButton.addActionListener(e -> Main.deckWindow.closeNewCardWindow());
-
-        JButton saveButton = new JButton("Save");
-        saveButton.setFont(Standards.myFont);
-        saveButton.setSize(25,25);
-        saveButton.setFocusable(false);
-        saveButton.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent e){
-
-                Card card = new Card(leftText.getText(), rightText.getText());
-                Main.deckDict.get(parentDeckName).addCard(card);
-                Main.deckWindow.addCard(card);
-                Main.deckWindow.updateCardList();
-                Main.deckWindow.increaseNumberCards();
-                Main.deckWindow.closeNewCardWindow();
-            }
-            });
-
-        newCardPanelButtons = new JPanel();
-        newCardPanelButtons.add(saveButton);
-        newCardPanelButtons.add(cancelButton);
-
-
         newCardPanelInfoRight= new JPanel(new GridLayout(3,1));
         JTextField nameFieldRight  = new JTextField("Answer");
         nameFieldRight.setFont(Standards.myFont);
@@ -75,6 +47,38 @@ public class NewCardWindow{
         leftText.setFont(Standards.myFont);
         leftText.setEditable(true);
         newCardPanelInfoLeft.add(leftText);
+
+        JButton cancelButton = new JButton("Cancel");
+        cancelButton.setFont(Standards.myFont);
+        cancelButton.setSize(25,25);
+        cancelButton.setFocusable(false);
+        cancelButton.addActionListener(e -> Main.deckWindow.closeNewCardWindow());
+
+        JButton saveButton = new JButton("Save");
+        saveButton.setFont(Standards.myFont);
+        saveButton.setSize(25,25);
+        saveButton.setFocusable(false);
+        saveButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+
+                String leftData = leftText.getText();
+                String rightData = rightText.getText();
+
+                Card card = new Card(leftData, rightData);
+                Main.connectionDB.insertNewCardInDB(parentDeckName,leftData,rightData);
+                Main.deckDict.get(parentDeckName).addCard(card);
+                Main.deckWindow.addCard(card);
+                Main.deckWindow.updateCardList();
+                Main.deckWindow.increaseNumberCards();
+                Main.deckWindow.closeNewCardWindow();
+            }
+        });
+
+        newCardPanelButtons = new JPanel();
+        newCardPanelButtons.add(saveButton);
+        newCardPanelButtons.add(cancelButton);
+
+
 
         fileChooserLeft = new JFileChooser();
         newCardPanelInfoLeft.add(fileChooserLeft);

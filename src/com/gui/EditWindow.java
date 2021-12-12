@@ -18,7 +18,7 @@ public class EditWindow {
         editFrame.setLayout(new BorderLayout());
         editFrame.setSize(Standards.width,Standards.height);
 
-        editPanel = new JScrollPane();
+//        editPanel = new JScrollPane();
 
 
 
@@ -42,7 +42,8 @@ public class EditWindow {
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
                         if(Main.decksList.verifyIfSelected()){
-                            Main.deckWindow.setName(Main.decksList.getSelectedValue().split(" ")[0]);
+                            Main.deckWindow = new DeckWindow();
+                            Main.deckWindow.setName(Main.decksList.getSelectedValue());
                             Main.showDeckWindow();
                         }
                     } });
@@ -64,11 +65,25 @@ public class EditWindow {
         panelSouth.add(backButton);
         panelSouth.add(editSelectedButton);
 
-        editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
+//        editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
         editFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
         editFrame.getContentPane().add(panelNorth,BorderLayout.NORTH);
         editFrame.getContentPane().add(panelEast,BorderLayout.EAST);
         editFrame.getContentPane().add(panelWest,BorderLayout.WEST);
+
+
+
+
+//        DeckInfoGui deck = new DeckInfoGui(text.getText());
+//        Main.deckDict.put(text.getText(),new Deck(text.getText()));
+
+
+//        Main.decksList.addDeck(deck);
+//        editFrame.getContentPane().remove(editPanel);
+        editPanel = Main.decksList.getList();
+        editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
+        refresh();
+//        deckCreate.dispose();
 
     }
 

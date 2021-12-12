@@ -4,11 +4,11 @@ public class CardLearnInfo {
     private String textInfo;
     private String imageInfo;
 
-    CardLearnInfo(String textInfo, String imageInfo){
+    CardLearnInfo(String textInfo_, String imageInfo_){
         textInfo = new String(" ");
         imageInfo = new String(" ");
-        this.textInfo = textInfo;
-        this.imageInfo = imageInfo;
+        this.textInfo = textInfo_;
+        this.imageInfo = imageInfo_;
     }
 
     public CardLearnInfo(String textInfo) {

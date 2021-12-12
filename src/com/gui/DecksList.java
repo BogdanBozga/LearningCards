@@ -1,5 +1,7 @@
 package com.gui;
 
+import com.fun.Deck;
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +16,24 @@ public class DecksList {
         deckListFrame = new JFrame();
         scrollPane = new JScrollPane();
         decksList = new ArrayList<>();
+
+        decksList = Main.connectionDB.getDeckList();
+
+        decksJList = new JList(decksList.toArray());
+        decksJList.setFont(Standards.myFont);
+    }
+    public void startOperation(){
+        for(String deck : decksList){
+            Main.decksList.addDeck(new DeckInfoGui(deck));
+            Main.deckDict.put(deck,new Deck(deck));
+        }
     }
 
     void addDeck(DeckInfoGui newDeck){
-        if(verifyIfExist(newDeck.getNameAndNumber())) {
+        if(verifyIfExist(newDeck.getName())) {
             //deck already exist
         } else{
-            decksList.add(newDeck.getNameAndNumber());
+            decksList.add(newDeck.getName());
             decksJList = new JList(decksList.toArray());
             decksJList.setFont(Standards.myFont);
         }
@@ -52,7 +65,7 @@ public class DecksList {
     }
 
     JScrollPane getList(){
-        if (decksJList.getModel().getSize() != 0)
+        if (decksJList != null)
             scrollPane = new JScrollPane(decksJList);
         else
             scrollPane = new JScrollPane();
