@@ -2,11 +2,12 @@ package com.gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class WelcomeWindow {
-    String name;
+    public String nameUser;
     private static JFrame welcomeFrame;
-    private JPanel welcomePanel;
     JTextField textField;
 
     public WelcomeWindow(){
@@ -17,8 +18,6 @@ public class WelcomeWindow {
 
 
 
-        welcomePanel = new JPanel();
-
 
         JButton enterButton = new JButton("Enter");
         JButton exitButton = new JButton("Exit");
@@ -27,7 +26,17 @@ public class WelcomeWindow {
         enterButton.setFocusable(false);
         exitButton.setFocusable(false);
 
-        enterButton.addActionListener(e -> entering());
+        enterButton.addActionListener(new ActionListener() {
+                                          @Override
+                                          public void actionPerformed(ActionEvent e) {
+                                              nameUser = textField.getText();
+                                              Main.connectionDB.insertUser(nameUser);
+                                              Main.showMainWindowFirstTime();
+
+                                          }
+                                      });
+
+
         exitButton.addActionListener(e -> Main.closeApp());
 
         JPanel panelSouth = new JPanel();
@@ -51,6 +60,8 @@ public class WelcomeWindow {
 
 
         textField = new JTextField(20);
+        textField.setFont(Standards.myFont);
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
         panelSouth.add(enterButton);
         panelSouth.add(exitButton);
         panelCenter.add(textField);
@@ -62,14 +73,14 @@ public class WelcomeWindow {
 
     }
 
+    public String getUserName(){
+        return nameUser;
+    }
     public void setVisibility(boolean visibility){
         welcomeFrame.setVisible(visibility);
     }
 
-    public void entering(){
-        name = textField.getText();
-        Main.showMainWindow();
-    }
+
     public Point getPosition(){
         return welcomeFrame.getLocation();
     }

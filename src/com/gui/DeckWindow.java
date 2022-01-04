@@ -11,8 +11,7 @@ import java.util.List;
 
 public class DeckWindow {
     private static JFrame deckFrame;
-//    private JPanel deckPanel;
-    String name;
+    String nameDeck;
     Integer numberCards=0;
     JTextField nameField;
     JTextField numberCardsField;
@@ -20,6 +19,7 @@ public class DeckWindow {
     private JScrollPane deckJScrollPanel;
     public List<String> cardsList;
     public JList cardsJList;
+    private List<Integer> cardsID;
 
     public DeckWindow(){
         deckFrame = new JFrame("Learning Cards");
@@ -50,7 +50,7 @@ public class DeckWindow {
         newButton.addActionListener(
                 new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        newCardWindow = new NewCardWindow(name);
+                        newCardWindow = new NewCardWindow(nameDeck);
                         newCardWindow.setVisible(true);
                     }
                 });
@@ -60,7 +60,21 @@ public class DeckWindow {
         removeButton.setFont(Standards.myFont);
         removeButton.setSize(25,25);
         removeButton.setFocusable(false);
-//        backButton.addActionListener(e -> Main.showMainWindow());
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(verifyIfSelected()){
+                    int cardID = cardsID.get(getSelectedIndex());
+                    decreaseNumberCards();
+                    cardsList.remove(getSelectedValue());
+                    cardsJList=new JList(cardsList.toArray());
+                    Main.connectionDB.deleteCard(cardID);
+                    updateCardList();
+                    update();
+                    refresh();
+                }
+            }
+        });
 
         JPanel panelSouth = new JPanel();
         JPanel panelNorth = new JPanel();
@@ -96,11 +110,15 @@ public class DeckWindow {
 
     public void increaseNumberCards(){
         numberCards++;
-        Main.deckDict.get(name).increaseNumberCards();
+        Main.deckDict.get(nameDeck).increaseNumberCards();
         update();
     }
 
 
+    public void decreaseNumberCards(){
+            numberCards--;
+            Main.deckDict.get(nameDeck).decreaseNumberCards();
+    }
 
     public void update(){
         numberCardsField.setText(numberCards.toString());
@@ -134,19 +152,18 @@ public class DeckWindow {
     }
 
     public void setName(String name){
-        this.name = new String();
         cardsList = new ArrayList<>();
         updateCardList();
         refresh();
 
-        this.name=name;
+        this.nameDeck=name;
         this.numberCards = Main.deckDict.get(name).getTotalCardsNumber();
         nameField.setText(name);
         numberCardsField.setText(numberCards.toString());
-
+        cardsID = new ArrayList<>();
         for(Card card : Main.deckDict.get(name).getCards()){
             String cardInf = card.getFrontInfo().getTextInfo()+ " --- " + card.getBackInfo().getTextInfo();
-//            System.out.println(cardInf);
+            cardsID.add(card.getCardID());
             cardsList.add(cardInf);
         }
         cardsJList = new JList(cardsList.toArray());
@@ -156,9 +173,19 @@ public class DeckWindow {
     public void closeNewCardWindow(){
         newCardWindow.dispose();
     }
+
     public void refresh(){
         deckFrame.invalidate();
-        deckFrame.validate();
         deckFrame.repaint();
+        deckFrame.validate();
     }
+    boolean verifyIfSelected(){
+        return  !cardsJList.isSelectionEmpty();
+    }
+
+    String getSelectedValue(){
+        return cardsJList.getSelectedValue().toString();
+    }
+
+    int getSelectedIndex(){return  cardsJList.getSelectedIndex();};
 }

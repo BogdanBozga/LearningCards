@@ -7,35 +7,45 @@ import java.util.Map;
 
 public class Main {
 //    public static final List<Deck> deckList = new ArrayList<>();
+
     public static final DbConnection connectionDB = new DbConnection();
     public static final Map<String, Deck> deckDict = new HashMap<>();
     public static final DecksList decksList = new DecksList();
 
     private static final MainWindow  mainWindow = new MainWindow();
-    private static final LearnWindow learnWindow = new LearnWindow();
+    public static final LearnWindow learnWindow = new LearnWindow();
 
-
+    public static LearnCardsWindow learnCardWindow = new LearnCardsWindow();
     private static final EditWindow editWindow = new EditWindow();
     public static  DeckWindow deckWindow = new DeckWindow();
-    private static final WelcomeWindow welcomeWindow = new WelcomeWindow();
+
+    public static final WelcomeWindow welcomeWindow = new WelcomeWindow();
 
 
 
     public static void main(String[] args) {
-        showMainWindow();
-//        showWelcomeWindow();
-
         connectionDB.initializeDeckDict();
+        showWelcomeWindow();
+
     }
 
 
     public static void showWelcomeWindow(){
         welcomeWindow.setVisibility(true);
+//        connectionDB.initializeDeckDict();
+    }
+
+    public static void showMainWindowFirstTime(){
+        decksList.startOperation();
+        mainWindow.setPosition(welcomeWindow.getPosition());
+        mainWindow.setVisibility(true);
+        welcomeWindow.setVisibility(false);
+        connectionDB.initializeDeckDict();
     }
 
     public static void showMainWindow(){
 
-        decksList.startOperation();
+//        decksList.startOperation();
         if(learnWindow.isVisible()) {
             mainWindow.setPosition(learnWindow.getPosition());
             learnWindow.setVisibility(false);
@@ -43,9 +53,6 @@ public class Main {
         else if(editWindow.isVisible()) {
             mainWindow.setPosition(editWindow.getPosition());
             editWindow.setVisibility(false);
-        }else if(welcomeWindow.isVisible()){
-            mainWindow.setPosition(welcomeWindow.getPosition());
-            welcomeWindow.setVisibility(false);
         }else if(deckWindow.isVisible()){
             mainWindow.setPosition(deckWindow.getPosition());
             deckWindow.setVisibility(false);
@@ -88,6 +95,7 @@ public class Main {
 //        deckWindow.dispose();
         System.exit(0);
     }
+
 
 
 

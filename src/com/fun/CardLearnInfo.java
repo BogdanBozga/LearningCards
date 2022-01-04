@@ -5,8 +5,6 @@ public class CardLearnInfo {
     private String imageInfo;
 
     CardLearnInfo(String textInfo_, String imageInfo_){
-        textInfo = new String(" ");
-        imageInfo = new String(" ");
         this.textInfo = textInfo_;
         this.imageInfo = imageInfo_;
     }

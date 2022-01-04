@@ -18,10 +18,6 @@ public class EditWindow {
         editFrame.setLayout(new BorderLayout());
         editFrame.setSize(Standards.width,Standards.height);
 
-//        editPanel = new JScrollPane();
-
-
-
         JButton backButton = new JButton("Back");
         backButton.setFont(Standards.myFont);
         backButton.setSize(25,25);
@@ -48,6 +44,25 @@ public class EditWindow {
                         }
                     } });
 
+        JButton deleteSelectedButton = new JButton("Delete Selected");
+        deleteSelectedButton.setFont(Standards.myFont);
+        deleteSelectedButton.setSize(25,25);
+        deleteSelectedButton.setFocusable(false);
+        deleteSelectedButton.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        if(Main.decksList.verifyIfSelected()){
+                            String selectedDeckName = Main.decksList.getSelectedValue();
+
+                            Main.decksList.removeDeck(selectedDeckName);
+                            Main.connectionDB.deleteDeck(selectedDeckName);
+                            editFrame.getContentPane().remove(editPanel);
+                            editPanel = Main.decksList.getList();
+                            editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
+                            refresh();
+                        }
+
+                    } });
 
 
         JPanel panelSouth = new JPanel();
@@ -64,26 +79,17 @@ public class EditWindow {
         panelSouth.add(newButton);
         panelSouth.add(backButton);
         panelSouth.add(editSelectedButton);
+        panelSouth.add(deleteSelectedButton);
 
-//        editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
         editFrame.getContentPane().add(panelSouth,BorderLayout.SOUTH);
         editFrame.getContentPane().add(panelNorth,BorderLayout.NORTH);
         editFrame.getContentPane().add(panelEast,BorderLayout.EAST);
         editFrame.getContentPane().add(panelWest,BorderLayout.WEST);
 
-
-
-
-//        DeckInfoGui deck = new DeckInfoGui(text.getText());
-//        Main.deckDict.put(text.getText(),new Deck(text.getText()));
-
-
-//        Main.decksList.addDeck(deck);
-//        editFrame.getContentPane().remove(editPanel);
         editPanel = Main.decksList.getList();
         editFrame.getContentPane().add(editPanel,BorderLayout.CENTER);
         refresh();
-//        deckCreate.dispose();
+
 
     }
 

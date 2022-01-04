@@ -12,6 +12,8 @@ public class DecksList {
     JPanel panel;
     List<String> decksList;
     JList decksJList;
+
+
     DecksList(){
         deckListFrame = new JFrame();
         scrollPane = new JScrollPane();
@@ -22,6 +24,8 @@ public class DecksList {
         decksJList = new JList(decksList.toArray());
         decksJList.setFont(Standards.myFont);
     }
+
+
     public void startOperation(){
         for(String deck : decksList){
             Main.decksList.addDeck(new DeckInfoGui(deck));
@@ -42,6 +46,9 @@ public class DecksList {
     void updateScrollPane(){
         panel = new JPanel();
         scrollPane = new JScrollPane(panel);
+        decksJList = new JList(decksList.toArray());
+        decksJList.setFont(Standards.myFont);
+
     }
 
     boolean verifyIfExist(String name){
@@ -53,16 +60,6 @@ public class DecksList {
         return false;
     }
 
-    boolean removeDeck(String name){
-            for(String deckName : decksList){
-                if(deckName.compareTo(name) ==0){
-                    decksList.remove(deckName);
-                    updateScrollPane();
-                    return true;
-                }
-            }
-        return false;
-    }
 
     JScrollPane getList(){
         if (decksJList != null)
@@ -80,6 +77,11 @@ public class DecksList {
 
     String getSelectedValue(){
         return decksJList.getSelectedValue().toString();
+    }
+
+    public void removeDeck(String deckName){
+        decksList.remove(deckName);
+        updateScrollPane();
     }
 
 }

@@ -55,6 +55,11 @@ public class Deck {
         connectionDB.updateCardsNumber(totalCardsNumber,name);
     }
 
+    public void decreaseNumberCards(){
+        totalCardsNumber--;
+        connectionDB.updateCardsNumber(totalCardsNumber,name);
+
+    }
     public int getTotalCardsNumber() {
         return totalCardsNumber;
     }

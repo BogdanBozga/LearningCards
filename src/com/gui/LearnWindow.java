@@ -1,5 +1,9 @@
 package com.gui;
 
+import com.fun.Card;
+import com.fun.Deck;
+
+import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,17 +14,16 @@ public class LearnWindow {
     private static JFrame learnFrame;
 //    private JPanel learnPanel;
     private JScrollPane learnJScrollPane;
+    List<Card> cards;
+    int currentIndex = 0;
+    int lastIndex;
+    private Deck learnedDeck;
 
     public LearnWindow(){
         learnFrame = new JFrame("Learning Cards");
         learnFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         learnFrame.setLayout(new BorderLayout());
         learnFrame.setSize(Standards.width,Standards.height);
-
-
-
-//        learnPanel = new JPanel();
-
 
         JButton backButton = new JButton("Back");
         backButton.setFont(Standards.myFont);
@@ -34,37 +37,32 @@ public class LearnWindow {
         JPanel panelEast = new JPanel();
 
         panelSouth.setPreferredSize(new Dimension(1,50));
-
         panelNorth.setPreferredSize(new Dimension(1,65));
         panelEast.setPreferredSize(new Dimension(65,1));
         panelWest.setPreferredSize(new Dimension(65,1));
 
 
-
-
-
         learnJScrollPane = new JScrollPane();
-
         update();
-//        learnFrame.getContentPane().remove(learnJScrollPane);
-//        if(Main.decksList != null)
-//            learnJScrollPane = Main.decksList.getList();
-//        learnFrame.getContentPane().add(learnJScrollPane,BorderLayout.CENTER);
-//        refresh();
-
 
 
         JButton learnSelectedButton = new JButton("Learn Selected");
         learnSelectedButton.setFont(Standards.myFont);
         learnSelectedButton.setSize(25,25);
         learnSelectedButton.setFocusable(false);
-//        learnSelectedButton.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed(ActionEvent e) {
-//                        newCardWindow = new NewCardWindow(name);
-//                        newCardWindow.setVisible(true);
-//                    }
-//                });
+        learnSelectedButton.addActionListener(
+                new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        if (Main.decksList.verifyIfSelected()) {
+
+                            int selectedDeckID = Main.connectionDB.getDeckID(Main.decksList.getSelectedValue());
+                            cards = Main.connectionDB.getCards(selectedDeckID);
+                            lastIndex = cards.size();
+                            currentIndex = 0;
+                            startLearning();
+                        }
+                    }
+                });
 
 
 
@@ -123,5 +121,22 @@ public class LearnWindow {
 //        deckFrame.getContentPane().add(deckJScrollPanel,BorderLayout.CENTER);
 //        refresh();
 //    }
+
+
+    public void startLearning(){
+        Main.learnCardWindow.dispose();
+        currentIndex++;
+        if(currentIndex<= lastIndex) {
+            Main.learnCardWindow = new LearnCardsWindow(cards.get(currentIndex-1));
+            Main.learnCardWindow.setVisible(true);
+            learnFrame.setVisible(false);
+        }else{
+            Main.learnWindow.setVisibility(true);
+            Main.learnCardWindow.dispose();
+        }
+
+    }
+
+
     }
 

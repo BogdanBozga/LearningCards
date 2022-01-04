@@ -3,9 +3,11 @@ package com.gui;
 import com.fun.Card;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class NewCardWindow{
     JFrame newCardFrame;
@@ -15,26 +17,48 @@ public class NewCardWindow{
 
     JTextField leftText;
     JTextField rightText;
-    JFileChooser fileChooserLeft;
-    JFileChooser fileChooserRight;
+
+    String questionImagePath = "";
+    String answerImagePath = "";
+
 
     NewCardWindow(String parentDeckName){
         newCardFrame = new JFrame("Learning Cards");
         newCardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newCardFrame.setLayout(new GridLayout(3,1));
         newCardFrame.setSize(Standards.width,Standards.height);
+
         newCardPanelInfoRight= new JPanel(new GridLayout(3,1));
         JTextField nameFieldRight  = new JTextField("Answer");
         nameFieldRight.setFont(Standards.myFont);
         nameFieldRight.setEditable(false);
         newCardPanelInfoRight.add(nameFieldRight);
 
+
         rightText = new JTextField();
         rightText.setFont(Standards.myFont);
         rightText.setEditable(true);
         newCardPanelInfoRight.add(rightText);
 
-        fileChooserRight = new JFileChooser();
+
+        JButton fileChooserRight  = new JButton("Chose Answer Image");
+        fileChooserRight.setFocusable(false);
+        fileChooserRight.setFont(Standards.myFont);
+        fileChooserRight.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(new File(System.getProperty("user.home")));
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images","jpg","gif","png");
+                file.addChoosableFileFilter(filter);
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION){
+                    File selectedFile = file.getSelectedFile();
+                     answerImagePath = selectedFile.getPath();
+                    //insert in database
+                }
+            }
+        });
         newCardPanelInfoRight.add(fileChooserRight);
 
         newCardPanelInfoLeft = new JPanel(new GridLayout(3,1));
@@ -47,6 +71,25 @@ public class NewCardWindow{
         leftText.setFont(Standards.myFont);
         leftText.setEditable(true);
         newCardPanelInfoLeft.add(leftText);
+
+
+        JButton fileChooserLeft  = new JButton("Chose Question Image");
+        fileChooserLeft.setFocusable(false);
+        fileChooserLeft.setFont(Standards.myFont);
+        fileChooserLeft.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser file = new JFileChooser();
+                file.setCurrentDirectory(new File(System.getProperty("user.home")));
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("*.Images","jpg","gif","png");
+                file.addChoosableFileFilter(filter);
+                int result = file.showSaveDialog(null);
+                if(result == JFileChooser.APPROVE_OPTION){
+                    File selectedFile = file.getSelectedFile();
+                    questionImagePath = selectedFile.getPath();
+                }
+            }
+        });
 
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setFont(Standards.myFont);
@@ -64,8 +107,8 @@ public class NewCardWindow{
                 String leftData = leftText.getText();
                 String rightData = rightText.getText();
 
-                Card card = new Card(leftData, rightData);
-                Main.connectionDB.insertNewCardInDB(parentDeckName,leftData,rightData);
+                Card card = new Card(leftData, questionImagePath, rightData, answerImagePath);
+                Main.connectionDB.insertNewCardInDB(parentDeckName, leftData, rightData, questionImagePath, answerImagePath);
                 Main.deckDict.get(parentDeckName).addCard(card);
                 Main.deckWindow.addCard(card);
                 Main.deckWindow.updateCardList();
@@ -80,7 +123,6 @@ public class NewCardWindow{
 
 
 
-        fileChooserLeft = new JFileChooser();
         newCardPanelInfoLeft.add(fileChooserLeft);
 
         newCardFrame.getContentPane().add(newCardPanelInfoLeft);
